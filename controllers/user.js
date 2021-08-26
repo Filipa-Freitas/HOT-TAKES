@@ -31,7 +31,7 @@ exports.login = (req, res, next) => {
                         userId: user._id,
                         token: jwt.sign(
                             { userId: user._id },
-                            'RANDOM_TOKEN_SECRET',
+                            'MY_SUPER_EXTRA_MEGA_GYGA_SECRET_TOKEN',
                             { expiresIn: '24h' }
                         )
                     });
