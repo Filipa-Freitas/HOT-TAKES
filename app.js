@@ -10,7 +10,8 @@ const app = express();
 
 mongoose.connect(process.env.CONNECTION_STRING_MONGODB,
   { useNewUrlParser: true,
-    useUnifiedTopology: true })
+    useUnifiedTopology: true,
+    useCreateIndex: true })
 .then(() => console.log('Connexion à MongoDB réussie !'))
 .catch(() => console.log('Connexion à MongoDB échouée !'));
 
