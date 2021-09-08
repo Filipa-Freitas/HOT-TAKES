@@ -13,11 +13,12 @@ module.exports = (req, res, next) => {
                 throw "Les champs doivent contenir uniquement des lettres et des chiffres";
             } else {
                 console.log("it's good");
-                next();
+                
             }
         }
+        next();
     } catch (error) {
-        res.status(400).json({ error });
+        res.status(400).json({ message: error.message });
     }
 };
 

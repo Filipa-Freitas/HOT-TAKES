@@ -14,7 +14,7 @@ exports.createSauce = (req, res, next) => {
   });
   sauce.save()
     .then(() => res.status(201).json({ message: 'sauce enregistrée !'}))
-    .catch(error => res.status(400).json({ error }));
+    .catch(error => res.status(400).json({ message: error.message }));
 };
 
 exports.modifySauce = (req, res, next) => {
@@ -26,7 +26,7 @@ exports.modifySauce = (req, res, next) => {
 
   Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
     .then(() => res.status(200).json({ message: 'Sauce modifiéé !'}))
-    .catch(error => res.status(400).json({ error }));
+    .catch(error => res.status(400).json({ message: error.message }));
 };
 
 exports.deleteSauce = (req, res, next) => {
@@ -46,7 +46,7 @@ exports.deleteSauce = (req, res, next) => {
 exports.getOneSauce = (req, res, next) => {
   Sauce.findOne({ _id: req.params.id })
     .then(sauce => res.status(200).json(sauce))
-    .catch(error => res.status(404).json({ error }));
+    .catch(error => res.status(404).json({ message: error.message }));
 };
 
 exports.getAllSauces = (req, res, next) => {
@@ -83,7 +83,7 @@ exports.handleLikesAndDislikes = (req, res, next) => {
     case -1 :
       Sauce.updateOne({ _id: req.params.id }, { $push: { usersDisliked: req.body.userId }, $inc: { dislikes: +1 }})
         .then(() => res.status(200).json({ message: 'Je n\'aime pas !'}))
-        .catch(error => res.status(400).json({ error }));
+        .catch(error => res.status(400).json({ message: error.message }));
       break;
 
     default:
