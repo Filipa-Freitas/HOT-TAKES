@@ -1,6 +1,6 @@
 
 module.exports = (req, res, next) => {
-    const validInput = /^[a-zA-Z0-9_ ]*$/;
+    const validInput = /^[a-zA-ZÀ-ÿ0-9_ ]*$/;
     try {
         if (req.body.sauce) {
             sauce = JSON.parse(req.body.sauce);
