@@ -4,9 +4,9 @@ const User = require('../models/user');
 const passwordValidator = require('password-validator');
 require('dotenv').config();
 
-var schema = new passwordValidator();
+const passwordSchema = new passwordValidator();
 
-schema
+passwordSchema
 .is().min(6)                                    // Minimum length 6
 .is().max(100)                                  // Maximum length 100
 .has().uppercase()                              // Must have uppercase letters
@@ -17,7 +17,7 @@ schema
 
 
 exports.signup = (req, res, next) => {
-    if (schema.validate(req.body.password)) {
+    if (passwordSchema.validate(req.body.password)) {
         bcrypt.hash(req.body.password, 10)
             .then(hash => {
                 const user = new User({
@@ -27,10 +27,10 @@ exports.signup = (req, res, next) => {
             user.save()
                 .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
                 .catch(error => res.status(400).json({ message: error.message }));
-        })    
-        .catch(error => res.status(500).json({ message: error.message }));
+            })    
+            .catch(error => res.status(500).json({ message: error.message }));
     } else {
-        res.status(400).json({message: "Invalid password: Min length = 6 / Max length = 100 / Uppercase letters / Lowercase letters / have at least 2 digits"});
+        res.status(400).json({message: "Mot de passe incorrect: Min = 6 / Max = 100 / Majuscules / Minuscules / au moins 2 chiffres"});
     }    
 };
 

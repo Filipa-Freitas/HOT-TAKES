@@ -10,10 +10,9 @@ module.exports = (req, res, next) => {
         let sauceInputs = { name: sauce.name, manufacturer: sauce.manufacturer, description: sauce.description, mainPepper: sauce.mainPepper };
         for (let key in sauceInputs) {
             if (validInput.test(sauceInputs[key]) === !true) {
-                throw "Les champs doivent contenir uniquement des lettres et des chiffres";
+                throw new Error("Champs ne pouvant contenir que des lettres et des chiffres") ;
             } else {
                 console.log("it's good");
-                
             }
         }
         next();

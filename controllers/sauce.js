@@ -21,7 +21,7 @@ exports.modifySauce = (req, res, next) => {
   const sauceObject = req.file ?
     {
       ...JSON.parse(req.body.sauce),
-      imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+      imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     } : { ...req.body };
 
   Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
@@ -87,6 +87,6 @@ exports.handleLikesAndDislikes = (req, res, next) => {
       break;
 
     default:
-      console.log(error);
+      throw error;
   }
 };
