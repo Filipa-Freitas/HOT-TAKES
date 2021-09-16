@@ -25,7 +25,7 @@ exports.modifySauce = (req, res, next) => {
     {
       ...filteredData,
       imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-    } : xssFilter({ ...req.body }) ;
+    } : xssFilter({ ...req.body });
 
   Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
     .then(() => res.status(200).json({ message: 'Sauce modifiéé !'}))
@@ -90,6 +90,6 @@ exports.handleLikesAndDislikes = (req, res, next) => {
       break;
 
     default:
-      throw error;
+      throw new Error("Vote incorrect");
   }
 };

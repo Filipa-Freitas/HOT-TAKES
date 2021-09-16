@@ -13,7 +13,7 @@ module.exports = (req, res, next) => {
             if (validInput.test(sauceData[key]) !== true) {
                 throw new Error("Champs ne pouvant contenir que des lettres et des chiffres") ;
             } else {
-                console.log("it's good");
+                // console.log("it's good");
             }
         }
         next();
