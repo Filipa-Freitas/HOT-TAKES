@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const passwordValidator = require('password-validator');
+const { xssFilter } = require("../utils/security");
 require('dotenv').config();
 
 const passwordSchema = new passwordValidator();
@@ -17,11 +18,13 @@ passwordSchema
 
 
 exports.signup = (req, res, next) => {
-    if (passwordSchema.validate(req.body.password)) {
-        bcrypt.hash(req.body.password, 10)
+    const filteredBody = xssFilter(req.body);
+    console.log(filteredBody);
+    if (passwordSchema.validate(filteredBody.password)) {
+        bcrypt.hash(filteredBody.password, 10)
             .then(hash => {
                 const user = new User({
-                    email: req.body.email,
+                    email: filteredBody.email,
                     password: hash
                 });
             user.save()
@@ -35,12 +38,13 @@ exports.signup = (req, res, next) => {
 };
 
 exports.login = (req, res, next) => {
-    User.findOne({ email: req.body.email })
+    const filteredBody = xssFilter(req.body);
+    User.findOne({ email: filteredBody.email })
         .then(user => {
             if (!user) {
                 return res.status(401).json({ error: 'Utilisateur non trouvé !' });
             }
-            bcrypt.compare(req.body.password, user.password)
+            bcrypt.compare(filteredBody.password, user.password)
                 .then(valid => {
                     if (!valid) {
                         return res.status(401).json({ error: 'Mot de passe incorrect !' });

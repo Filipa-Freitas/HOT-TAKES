@@ -1,4 +1,5 @@
 const Sauce = require('../models/sauce');
+const jwt = require('jsonwebtoken');
 const { xssFilter } = require("../utils/security");
 const fs = require('fs');
 
@@ -33,15 +34,22 @@ exports.modifySauce = (req, res, next) => {
 };
 
 exports.deleteSauce = (req, res, next) => {
+  const token = req.headers.authorization.split(' ')[1];
+  const decodedToken = jwt.verify(token, process.env.SECRET_TOKEN);
+  const userId = decodedToken.userId;
+
   Sauce.findOne({ _id: req.params.id })
     .then(sauce => {
-      const filename = sauce.imageUrl.split('/images/')[1];
-      
-      fs.unlink(`images/${filename}`, () => {
+      if (sauce.userId === userId) {
+        const filename = sauce.imageUrl.split('/images/')[1];
+        fs.unlink(`images/${filename}`, () => {
         Sauce.deleteOne({ _id: req.params.id })
-        .then(() => res.status(200).json({ message: 'Sauce supprimée !'}))
-        .catch(error => res.status(400).json({ message: error.message }));
+          .then(() => res.status(200).json({ message: 'Sauce supprimée !'}))
+          .catch(error => res.status(400).json({ message: error.message }));
       });
+      } else {
+        return res.status(401).json({ message: "Vous ne pouvez pas supprimer cette sauce !"});
+      }
     })
     .catch(error => res.status(500).json({ message: error.message }));
 };
