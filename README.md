@@ -23,12 +23,13 @@ Piiquante, veut développer une application web de critique des sauces piquantes
 **Le frontend :**
 - Installer NodeJS 12.14 ou 14.0, Angular CLI 7.0.2., node-sass 4.14+
 - Cloner le repository
-- nmp install
+- npm install
+- npm start
 
 **Le backend :**
-- Télécharger le code
-- nmp install
-- Exécuter le serveur nodemon
+- Cloner le repository
+- npm install
+- Exécuter le serveur nodemon server.js
 
 ## Fabriqué avec
 
