@@ -31,7 +31,7 @@ const limiter = rateLimit({
   message: 'Trop de requêtes depuis cette IP, veuillez réessayer dans 15 minutes!'
 });
 
-app.use(limiter); // contre attaque brute force
+app.use(limiter); // contre attaque brute force + ddos
 
 app.use(mongoSanitize()); // Contre NOSQL query injection
 

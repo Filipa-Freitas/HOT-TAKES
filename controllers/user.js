@@ -1,40 +1,23 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
-const passwordValidator = require('password-validator');
 const { xssFilter } = require("../utils/security");
 require('dotenv').config();
 
-const passwordSchema = new passwordValidator();
-
-passwordSchema
-.is().min(6)                                    // Minimum length 6
-.is().max(100)                                  // Maximum length 100
-.has().uppercase()                              // Must have uppercase letters
-.has().lowercase()                              // Must have lowercase letters
-.has().digits(2)                                // Must have at least 2 digits
-.has().not().spaces()                           // Should not have spaces
-.is().not().oneOf(['Passw0rd', 'Password123']); // Blacklist these values
-
-
 exports.signup = (req, res, next) => {
     const filteredBody = xssFilter(req.body);
-    console.log(filteredBody);
-    if (passwordSchema.validate(filteredBody.password)) {
-        bcrypt.hash(filteredBody.password, 10)
-            .then(hash => {
-                const user = new User({
-                    email: filteredBody.email,
-                    password: hash
-                });
-            user.save()
-                .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
-                .catch(error => res.status(400).json({ message: error.message }));
-            })    
-            .catch(error => res.status(500).json({ message: error.message }));
-    } else {
-        res.status(400).json({message: "Mot de passe incorrect: Min = 6 / Max = 100 / Majuscules / Minuscules / au moins 2 chiffres"});
-    }    
+    
+    bcrypt.hash(filteredBody.password, 10)
+        .then(hash => {
+            const user = new User({
+                email: filteredBody.email,
+                password: hash
+            });
+        user.save()
+            .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
+            .catch(error => res.status(400).json({ message: error.message }));
+        })    
+        .catch(error => res.status(500).json({ message: error.message }));
 };
 
 exports.login = (req, res, next) => {
